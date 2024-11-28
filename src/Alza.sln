@@ -2,6 +2,12 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alza.Api", "Alza.Api\Alza.Api.csproj", "{16FD428B-1A13-4320-8F5F-3D1AFD2AB193}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "solution items", "solution items", "{1F4676DC-F922-4E15-B565-65A40639A3C8}"
+	ProjectSection(SolutionItems) = preProject
+		..\docker-compose.local.yml = ..\docker-compose.local.yml
+		..\docker-compose.yml = ..\docker-compose.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

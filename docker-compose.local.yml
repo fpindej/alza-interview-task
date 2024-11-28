@@ -1,0 +1,37 @@
+services:
+  alza-api:
+    build:
+      context: ./src/Alza.Api
+      dockerfile: Dockerfile
+    container_name: alza-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5001:8080"
+    restart: unless-stopped
+    networks:
+      - alza
+    depends_on:
+      - alza-db
+
+  alza-db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: alza-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SomePassword123       # Used for local development only
+    volumes:
+      - alza_db_data:/var/opt/mssql
+    ports:
+      - "1433:1433"
+    restart: unless-stopped
+    networks:
+      - alza
+
+networks:
+  alza:
+    driver: bridge
+
+volumes:
+  alza_db_data:
+    driver: local
