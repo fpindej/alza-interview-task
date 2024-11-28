@@ -6,6 +6,7 @@ services:
     container_name: alza-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__Database=Server=alza-db;Database=AlzaDb;User Id=sa;Password=SomePassword123;TrustServerCertificate=True;
     ports:
       - "5001:8080"
     restart: unless-stopped
