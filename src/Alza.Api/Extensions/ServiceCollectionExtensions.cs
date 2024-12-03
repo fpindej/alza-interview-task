@@ -1,5 +1,8 @@
 ﻿using Asp.Versioning;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
+using Microsoft.IdentityModel.Protocols.Configuration;
 using Microsoft.OpenApi.Models;
+using Environments = Alza.Logging.Environments;
 
 namespace Alza.Api.Extensions;
 
@@ -37,6 +40,19 @@ internal static class ServiceCollectionExtensions
     
             opt.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
         });
+
+        return services;
+    }
+
+    public static IServiceCollection AddHealthChecks(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHealthChecks()
+            .AddCheck("Web API", () => HealthCheckResult.Healthy("App is running"), new[] { "ready", "api" })
+            .AddSqlServer(
+                configuration.GetConnectionString("Database") ?? throw new InvalidConfigurationException("Missing DB connection string."),
+                name: "SQL Server",
+                tags: new[] { "ready", "database" }
+            );
 
         return services;
     }

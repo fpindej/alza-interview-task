@@ -1,6 +1,8 @@
 using Alza.Api.Extensions;
 using Alza.Api.Middlewares;
 using Alza.Persistence.Extensions;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Serilog;
 
@@ -13,6 +15,7 @@ try
     Log.Information("Starting web host");
     var builder = WebApplication.CreateBuilder(args);
     
+    Log.Debug("Use Serilog");
     builder.Host.UseSerilog((context, _, loggerConfiguration) =>
     {
         Alza.Logging.LoggerConfigurationExtensions.SetupLogger(context.Configuration, loggerConfiguration);
@@ -29,6 +32,8 @@ try
         Log.Fatal(ex, "Failed to configure essential services or dependencies.");
         throw;
     }
+
+    builder.Services.AddHealthChecks(builder.Configuration);
 
     Log.Debug("Adding Controllers");
     builder.Services.AddControllers();
@@ -78,6 +83,12 @@ try
 
     Log.Debug("Mapping controller routes");
     app.MapControllers();
+
+    Log.Debug("Mapping health checks");
+    app.MapHealthChecks("/health", new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
     await app.RunAsync();
 }
