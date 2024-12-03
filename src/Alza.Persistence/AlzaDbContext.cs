@@ -15,5 +15,7 @@ internal class AlzaDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlzaDbContext).Assembly);
+
+        modelBuilder.SeedData();
     }
 }
