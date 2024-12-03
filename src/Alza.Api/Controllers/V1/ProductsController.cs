@@ -1,12 +1,14 @@
 ﻿using Alza.Api.Dtos;
 using Alza.Api.Mappings;
 using Alza.Application.Repositories;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Alza.Api.Controllers;
+namespace Alza.Api.Controllers.V1;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 public class ProductsController : ControllerBase
 {
     private readonly IProductRepository _productRepository;
