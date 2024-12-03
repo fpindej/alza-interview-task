@@ -1,4 +1,5 @@
 using Alza.Api.Extensions;
+using Alza.Api.Middlewares;
 using Alza.Persistence.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +21,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.UseAuthorization();
 
