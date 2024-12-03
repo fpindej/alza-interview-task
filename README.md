@@ -96,3 +96,6 @@ A shared project between the actual solution and tests. Holds static data in a C
 
 An xUnit project with some basic controller tests, as per the assignment.
 
+### Alza.Logging
+
+Project responsible for holding the Serilog packages and configuring the logging in the entire web application.
