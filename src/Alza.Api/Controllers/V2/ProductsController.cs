@@ -9,6 +9,7 @@ namespace Alza.Api.Controllers.V2;
 [ApiController]
 [Route("api/v{version:apiVersion}/[controller]")]
 [ApiVersion("2.0")]
+[ApiExplorerSettings(GroupName = "v2")]
 public class ProductsController : ControllerBase
 {
     private readonly IProductRepository _productRepository;
