@@ -16,6 +16,7 @@ public static class ServiceCollectionExtensions
             opt.UseSqlServer(connectionString);
         });
 
+        // Inject MockProductRepository to use mock data instead. This could also be based on environment.
         services.AddScoped<IProductRepository, ProductRepository>();
 
         return services;

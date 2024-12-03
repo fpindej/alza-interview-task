@@ -14,6 +14,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alza.Persistence", "Alza.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alza.Application", "Alza.Application\Alza.Application.csproj", "{263875A8-55CC-4B72-A188-FF3943FEB4A6}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{2E65953E-B661-45DF-89C4-BEF88699D86A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Alza.MockInfrastructure", "Alza.MockInfrastructure\Alza.MockInfrastructure.csproj", "{76F30884-F4A4-40D9-90B8-280B135746AA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +40,13 @@ Global
 		{263875A8-55CC-4B72-A188-FF3943FEB4A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{263875A8-55CC-4B72-A188-FF3943FEB4A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{263875A8-55CC-4B72-A188-FF3943FEB4A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76F30884-F4A4-40D9-90B8-280B135746AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76F30884-F4A4-40D9-90B8-280B135746AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76F30884-F4A4-40D9-90B8-280B135746AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76F30884-F4A4-40D9-90B8-280B135746AA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FD246127-C925-443B-9872-8268EA21EA7E} = {47EA02F3-8F95-4BC3-9398-5946B0D347B8}
+		{76F30884-F4A4-40D9-90B8-280B135746AA} = {2E65953E-B661-45DF-89C4-BEF88699D86A}
 	EndGlobalSection
 EndGlobal

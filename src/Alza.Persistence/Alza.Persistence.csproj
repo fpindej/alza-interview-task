@@ -17,6 +17,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Alza.Application\Alza.Application.csproj" />
+      <ProjectReference Include="..\Alza.MockInfrastructure\Alza.MockInfrastructure.csproj" />
     </ItemGroup>
 
 </Project>
