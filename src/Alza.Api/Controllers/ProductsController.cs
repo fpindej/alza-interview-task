@@ -32,9 +32,18 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public ActionResult<ProductResponse> GetProductById(Guid id)
+    public async Task<ActionResult<ProductResponse>> GetProductById(Guid id)
     {
-        throw new NotImplementedException();
+        var product = await _productRepository.GetProductByIdAsync(id);
+
+        if (product is null)
+        {
+            return NotFound($"Product with ID {id} was not found.");
+        }
+
+        var response = product.ToResponse();
+
+        return Ok(response);
     }
 
     [HttpPut("{id:guid}")]

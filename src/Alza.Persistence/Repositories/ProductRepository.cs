@@ -28,9 +28,13 @@ internal sealed class ProductRepository : IProductRepository
         return productModels.Select(p => p.ToDomain());
     }
 
-    public Task<Product?> GetProductByIdAsync(Guid id)
+    public async Task<Product?> GetProductByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var model = await _context.Products
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        return model?.ToDomain();
     }
 
     public Task UpdateProductDescriptionAsync(Guid id, string description)
