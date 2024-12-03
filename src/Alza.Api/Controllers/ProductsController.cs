@@ -47,8 +47,10 @@ public class ProductsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public IActionResult UpdateProductDescription(Guid id, [FromBody] UpdateProductDescriptionRequest request)
+    public async Task<IActionResult> UpdateProductDescription(Guid id, [FromBody] UpdateProductDescriptionRequest request)
     {
-        throw new NotImplementedException();
+        await _productRepository.UpdateProductDescriptionAsync(id, request.Description);
+
+        return NoContent();
     }
 }

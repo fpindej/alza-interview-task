@@ -30,15 +30,37 @@ internal sealed class ProductRepository : IProductRepository
 
     public async Task<Product?> GetProductByIdAsync(Guid id)
     {
-        var model = await _context.Products
+        var productModel = await _context.Products
             .AsNoTracking()
             .FirstOrDefaultAsync(p => p.Id == id);
 
-        return model?.ToDomain();
+        return productModel?.ToDomain();
     }
 
-    public Task UpdateProductDescriptionAsync(Guid id, string description)
+    public async Task UpdateProductDescriptionAsync(Guid id, string description)
     {
-        throw new NotImplementedException();
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
+        try
+
+        {
+            var productModel = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (productModel is null)
+            {
+                throw new KeyNotFoundException($"Product with ID '{id}' was not found.");
+            }
+
+            productModel.Description = description;
+            _context.Products.Update(productModel);
+            await _context.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+        }
+        catch
+        {
+            await transaction.RollbackAsync();
+            throw;
+        }
     }
 }
