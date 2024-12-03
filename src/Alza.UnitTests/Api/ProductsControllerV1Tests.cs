@@ -71,12 +71,12 @@ public class ProductsControllerV1Tests
 
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
-        var returnedProduct = Assert.IsType<ProductResponse>(okResult.Value);
+        var responseProducts = Assert.IsType<ProductResponse>(okResult.Value);
 
-        Assert.Equal(product.Id, returnedProduct.Id);
-        Assert.Equal(product.Name, returnedProduct.Name);
-        Assert.Equal(product.Description, returnedProduct.Description);
-        Assert.Equal(product.Price, returnedProduct.Price);
+        Assert.Equal(product.Id, responseProducts.Id);
+        Assert.Equal(product.Name, responseProducts.Name);
+        Assert.Equal(product.Description, responseProducts.Description);
+        Assert.Equal(product.Price, responseProducts.Price);
     }
 
     [Fact]
