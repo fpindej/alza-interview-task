@@ -15,4 +15,8 @@
       </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Alza.Application\Alza.Application.csproj" />
+    </ItemGroup>
+
 </Project>
