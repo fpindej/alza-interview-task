@@ -5,7 +5,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
     ports:
-      - "5001:8080"
+      - "5003:8080"
     restart: unless-stopped
     networks:
       - alza

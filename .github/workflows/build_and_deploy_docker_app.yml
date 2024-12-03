@@ -1,0 +1,74 @@
+name: Build and Deploy Docker Application
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build_docker_image:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Inject Secrets into appsettings.Production.json
+        run: |
+          sed -i 's|<DB_CONNECTION_STRING>|'"${{ secrets.DB_CONNECTION_STRING }}"'|g' src/Alza.Api/appsettings.json
+
+      - name: Set Timestamp Tag for Docker Image
+        run: echo "IMAGE_TAG=$(date +'%Y%m%d-%H%M')" >> $GITHUB_ENV
+
+      - name: Build and Tag Docker Image
+        run: |
+          docker build -t alza-api:${{ env.IMAGE_TAG }} -f src/Alza.Api/Dockerfile src
+          docker tag alza-api:${{ env.IMAGE_TAG }} alza-api:latest
+
+      - name: Save Docker Image as Tar File
+        run: |
+          docker save -o alza-api.tar alza-api:${{ env.IMAGE_TAG }} alza-api:latest
+
+      - name: Prepare Docker Compose File
+        run: |
+          sed -i 's|<IMAGE_TAG>|'"${{ env.IMAGE_TAG }}"'|g' docker-compose.yml
+          sed -i 's|<MSSQL_SA_PASSWORD>|'"${{ secrets.MSSQL_SA_PASSWORD }}"'|g' docker-compose.yml
+
+      - name: Upload Docker Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-files
+          retention-days: 1
+          path: |
+            alza-api.tar
+            docker-compose.yml
+
+  deploy_to_server:
+    needs: build_docker_image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download Docker Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: docker-files
+          path: ./
+
+      - name: Configure SSH Access
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOYMENT_KEY }}" > ~/.ssh/deployment_key
+          chmod 600 ~/.ssh/deployment_key
+          ssh-keyscan -H "${{ secrets.SERVER_ADDRESS }}" >> ~/.ssh/known_hosts
+
+      - name: Transfer Files to Server
+        run: |
+          scp -i ~/.ssh/deployment_key docker-compose.yml alza-api.tar "${{ secrets.DEPLOYMENT_USER }}"@"${{ secrets.SERVER_ADDRESS }}":"${{ secrets.DOCKER_DEPLOY_PATH }}"
+
+      - name: Deploy Application
+        run: |
+          ssh -i ~/.ssh/deployment_key "${{ secrets.DEPLOYMENT_USER }}"@"${{ secrets.SERVER_ADDRESS }}" '
+            cd "${{ secrets.DOCKER_DEPLOY_PATH }}"
+            docker load -i alza-api.tar
+            docker compose up -d --remove-orphans
+            rm -f alza-api.tar
+          '
