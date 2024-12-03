@@ -9,6 +9,12 @@ public interface IProductRepository
     /// </summary>
     /// <returns>A list of all products.</returns>
     Task<IEnumerable<Product>> GetAllProductsAsync();
+    
+    /// <summary>
+    /// Retrieves all products paginated.
+    /// </summary>
+    /// <returns>A list of all products paginated.</returns>
+    Task<IEnumerable<Product>> GetAllProductsPaginatedAsync(int pageNumber, int pageSize);
 
     /// <summary>
     /// Retrieves a product by its unique identifier.

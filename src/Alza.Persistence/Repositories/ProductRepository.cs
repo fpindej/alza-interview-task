@@ -1,5 +1,6 @@
 ﻿using Alza.Application.Repositories;
 using Alza.Domain.Entities;
+using Alza.Persistence.Extensions;
 using Alza.Persistence.Mappings;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,22 @@ internal sealed class ProductRepository : IProductRepository
 
         if (productModels.Count is 0)
         {
-            return Enumerable.Empty<Product>();
+            return [];
+        }
+
+        return productModels.Select(p => p.ToDomain());
+    }
+
+    public async Task<IEnumerable<Product>> GetAllProductsPaginatedAsync(int pageNumber, int pageSize)
+    {
+        var productModels = await _context.Products
+            .AsNoTracking()
+            .Paginate(pageNumber, pageSize)
+            .ToListAsync();
+
+        if (productModels.Count is 0)
+        {
+            return [];
         }
 
         return productModels.Select(p => p.ToDomain());

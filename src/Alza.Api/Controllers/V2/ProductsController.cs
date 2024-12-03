@@ -1,4 +1,5 @@
 ﻿using Alza.Api.Dtos;
+using Alza.Api.Mappings;
 using Alza.Application.Repositories;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc;
@@ -18,8 +19,23 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts()
+    public async Task<ActionResult<IEnumerable<ProductResponse>>> GetAllProducts([FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10)
     {
-        throw new NotImplementedException();
+        if (pageNumber < 1 || pageSize < 1)
+        {
+            return BadRequest("Page number and page size must be non-negative.");
+        }
+
+        var products = (await _productRepository.GetAllProductsPaginatedAsync(pageNumber, pageSize)).ToList();
+
+        if (products.Count is 0)
+        {
+            return NotFound("No products were found.");
+        }
+
+        var response = products.Select(p => p.ToResponse());
+
+        return Ok(response);
     }
 }
