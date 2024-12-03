@@ -1,8 +1,17 @@
 using Alza.Api.Extensions;
 using Alza.Api.Middlewares;
 using Alza.Persistence.Extensions;
+using Serilog;
+
+var environmentName = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? Environments.Production;
+Log.Logger = Alza.Logging.LoggerConfigurationExtensions.ConfigureMinimalLogging(environmentName);
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Host.UseSerilog((context, _, loggerConfiguration) =>
+{
+    Alza.Logging.LoggerConfigurationExtensions.SetupLogger(context.Configuration, loggerConfiguration);
+}, preserveStaticLogger: true);
 
 // Add services to the container.
 builder.Services.AddPersistence(builder.Configuration);
@@ -21,6 +30,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseSerilogRequestLogging();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 

@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Alza.Logging\Alza.Logging.csproj" />
       <ProjectReference Include="..\Alza.Persistence\Alza.Persistence.csproj" />
     </ItemGroup>
 
