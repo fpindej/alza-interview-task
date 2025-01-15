@@ -1,8 +1,8 @@
 services:
   alza-api:
     build:
-      context: ./src/Alza.Api
-      dockerfile: Dockerfile
+      context: ./src
+      dockerfile: Alza.Api/Dockerfile
     container_name: alza-api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
